@@ -2,6 +2,7 @@
 '''A class BaseModel'''
 import uuid
 import datetime
+from models.engine.file_storage import FileStorage
 
 
 class BaseModel:
@@ -10,6 +11,8 @@ class BaseModel:
      Attributes:
         id (int): Identity of each instance.
     """
+    storage = FileStorage()
+
     def __init__(self, *args, **kwargs) -> None:
         """Creates new instances of Base.
 
@@ -28,6 +31,7 @@ class BaseModel:
             self.updated_at = datetime.datetime.now()
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
+            self.storage.new(self)
 
     def update(self):
         '''Update the time everytime object is called'''
@@ -36,6 +40,10 @@ class BaseModel:
     def save(self):
         '''updates updated_at with the current datetime'''
         self.updated_at = datetime.datetime.now()
+
+    def save(self):
+        '''Call save(self) method of storage'''
+        self.storage.save()
 
     def __str__(self):
         '''Return or print the classname'''
